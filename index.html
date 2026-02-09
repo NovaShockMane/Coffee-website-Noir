@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NOX Coffee — Small-batch Roastery</title>
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+  <meta name="description" content="NOX Coffee — Small-batch roastery and cafe.">
+  <link rel="icon" href="favicon.ico">
+</head>
+<body>
+  <div class="page-frame">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="#home">NOX<span class="accent">.</span></a>
+
+        <nav id="main-nav" class="nav" aria-label="Primary">
+          <a href="#home">Home</a>
+          <a href="#products">Menu</a>
+          <a href="#dashboard" id="open-dashboard-link">Dashboard</a>
+        </nav>
+
+        <button id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span class="hamburger" aria-hidden="true"></span>
+        </button>
+      </div>
+    </header>
+
+    <main class="content-area">
+      <section id="home" class="hero">
+        <div class="hero-inner container">
+          <h1>NOX Coffee</h1>
+          <p class="lead">Small-batch roastery. Bold flavors. Cozy atmosphere.</p>
+          <a class="btn" href="#products">Browse Menu</a>
+        </div>
+      </section>
+
+      <section id="products" class="section container">
+        <div class="section-head">
+          <h2 class="section-title">Our Menu</h2>
+          <p class="section-sub">Select product images and add to your cart.</p>
+        </div>
+
+        <div id="product-list" class="product-list" aria-live="polite"></div>
+      </section>
+
+      <section id="dashboard" class="section alt-bg container">
+        <div class="dashboard-inner">
+          <h2 class="section-title">Dashboard — Cart</h2>
+          <p id="cart-empty-note" class="form-note">Your cart is empty. Add items from the menu.</p>
+
+          <div id="cart-items" class="cart-items" aria-live="polite"></div>
+
+          <div class="cart-summary" id="cart-summary" hidden>
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <span id="subtotal-amount">$0.00</span>
+            </div>
+            <div class="summary-row">
+              <span>Discount</span>
+              <span id="discount-amount">$0.00</span>
+            </div>
+            <div class="summary-row">
+              <span>Tax (8%)</span>
+              <span id="tax-amount">$0.00</span>
+            </div>
+            <div class="summary-row total">
+              <span>Grand Total</span>
+              <span id="grandtotal-amount">$0.00</span>
+            </div>
+
+            <div class="summary-actions">
+              <button id="checkout-btn" class="btn primary">
+                <span class="btn-text">Checkout</span>
+                <span class="btn-spinner" aria-hidden="true"></span>
+              </button>
+              <button id="clear-cart" class="btn ghost">Clear Cart</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div class="footer-cols">
+          <div class="footer-col">
+            <strong>Contact</strong>
+            <ul class="footer-list">
+              <li><a href="mailto:nox.coffee@gmail.com">nox.coffee@gmail.com</a></li>
+              <li><a href="tel:+15551234567">+1 (555) 123-4567</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <strong>Location</strong>
+            <address class="footer-list">
+              123 Roast Lane<br>
+              Coffee City, ST 98765
+            </address>
+          </div>
+
+          <div class="footer-col">
+            <strong>Hours</strong>
+            <div class="footer-list">
+              Mon–Sun: 7:00 AM — 5:00 PM
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <small>© <span id="year"></span> NOX Coffee — Built with care.</small>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <div id="checkout-modal" class="modal" aria-hidden="true">
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="checkout-title">
+      <button class="modal-close" aria-label="Close checkout dialog">&times;</button>
+
+      <div class="modal-steps">
+        <div class="modal-step" data-step="1">
+          <h3 id="checkout-title">Checkout — Billing Type</h3>
+          <div class="field">
+            <label><input type="radio" name="billingType" value="Pickup" checked> Pickup</label>
+            <label><input type="radio" name="billingType" value="Delivery"> Delivery</label>
+          </div>
+          <div id="delivery-address-row" style="display:none; margin-top:0.6rem;">
+            <label for="delivery-address">Delivery address / location</label>
+            <textarea id="delivery-address" rows="3" placeholder="Enter delivery address or location"></textarea>
+          </div>
+
+          <div style="margin-top:8px;">
+            <label for="buyer-phone">Buyer phone</label>
+            <input id="buyer-phone" placeholder="Required for contact" />
+          </div>
+
+          <div class="modal-actions">
+            <button class="btn" id="step1-next">Next</button>
+            <button class="btn ghost modal-cancel">Cancel</button>
+          </div>
+        </div>
+
+        <div class="modal-step" data-step="2" style="display:none;">
+          <h3>Discount</h3>
+          <div class="field">
+            <label><input type="radio" name="discountType" value="none" checked> None</label><br>
+            <label><input type="radio" name="discountType" value="pwd"> PWD (20%)</label><br>
+            <label><input type="radio" name="discountType" value="senior"> Senior Citizen (20%)</label>
+          </div>
+
+          <div class="modal-actions">
+            <button class="btn ghost" id="step2-back">Back</button>
+            <button class="btn" id="step2-next">Next</button>
+          </div>
+        </div>
+
+        <div class="modal-step" data-step="3" style="display:none;">
+          <h3>Review & Confirm</h3>
+          <div id="review-items" style="margin-bottom:0.8rem;"></div>
+          <div class="summary-review">
+            <div>Subtotal: <span id="review-subtotal">$0.00</span></div>
+            <div>Discount: <span id="review-discount">$0.00</span></div>
+            <div>Tax (8%): <span id="review-tax">$0.00</span></div>
+            <div class="total-line">Grand Total: <strong id="review-grand">$0.00</strong></div>
+            <div style="margin-top:8px;">Estimated time: <span id="review-eta">—</span></div>
+          </div>
+
+          <div class="modal-actions">
+            <button class="btn ghost" id="step3-back">Back</button>
+            <button class="btn primary" id="confirm-order">Confirm Order</button>
+          </div>
+        </div>
+
+        <div class="modal-step" data-step="4" style="display:none;">
+          <h3>Order Complete</h3>
+          <div id="order-complete-message" style="margin-bottom:0.6rem;"></div>
+          <div id="order-timer" class="timer" aria-live="polite"></div>
+
+          <div class="modal-actions">
+            <button class="btn" id="done-close">Done</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="main.js" defer></script>
+</body>
+</html>
